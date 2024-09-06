@@ -126,8 +126,8 @@ Para mais informações sobre a criação de tabelas, veja a [Documentação Ofi
 Para inserir vários clientes na tabela:
 
 ```sql
-INSERT INTO clientes (nome, idade, cidade) VALUES ('João', 30, 'São Paulo');
-INSERT INTO clientes (nome, idade, cidade) VALUES ('Maria', 25, 'Rio de Janeiro');
+INSERT INTO clients (name, age, city) VALUES ('João', 30, 'São Paulo');
+INSERT INTO clients (name, age, city) VALUES ('Maria', 25, 'Rio de Janeiro');
 ```
 
 Veja mais detalhes na [Documentação do PostgreSQL - Comando INSERT](https://www.postgresql.org/docs/current/sql-insert.html).
@@ -141,9 +141,9 @@ Agora, crie uma tabela de pedidos relacionada aos clientes:
 ```sql
 CREATE TABLE orders (
     id SERIAL PRIMARY KEY,
-    cliente_id INT REFERENCES clientes(id),
-    valor DECIMAL(10, 2),
-    data_pedido DATE
+    customer_id INT REFERENCES clients(id),
+    amount DECIMAL(10, 2),
+    order_date DATE
 );
 ```
 
@@ -156,7 +156,7 @@ Para mais informações sobre chaves estrangeiras, veja a [Documentação Oficia
 Adicione alguns pedidos para os clientes:
 
 ```sql
-INSERT INTO pedidos (cliente_id, valor, data_pedido) VALUES (1, 150.00, '2024-09-01');
+INSERT INTO orders (cliente_id, amount, order_date) VALUES (1, 150.00, '2024-09-01');
 ```
 
 ---
@@ -166,9 +166,9 @@ INSERT INTO pedidos (cliente_id, valor, data_pedido) VALUES (1, 150.00, '2024-09
 Para fazer uma consulta utilizando `INNER JOIN` entre as tabelas relacionadas:
 
 ```sql
-SELECT clientes.nome, pedidos.valor, pedidos.data_pedido
-FROM clientes
-INNER JOIN pedidos ON clientes.id = pedidos.cliente_id;
+SELECT clientes.name, orders.amount, orders.order_date
+FROM clients
+INNER JOIN orders ON clients.id = orders.client_id;
 ```
 
 Veja mais sobre consultas com `JOIN` na [Documentação Oficial do PostgreSQL - JOIN](https://www.postgresql.org/docs/current/queries-table-expressions.html#QUERIES-JOIN).
