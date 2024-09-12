@@ -226,6 +226,12 @@ client_name |    product_name
 
 
 ```
+### DELETE CASCADE
+
+The ON DELETE CASCADE clause in the CREATE TABLE statement specifies what should happen to the rows in the clients_products table if a referenced row in the clients or products table is deleted.
+
+What ON DELETE CASCADE Means:
+ON DELETE CASCADE: When a row in the referenced table (clients or products) is deleted, all rows in the clients_products table that reference that row will also be automatically deleted.
 
 
 ---
