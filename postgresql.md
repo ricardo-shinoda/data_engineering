@@ -156,7 +156,7 @@ Para mais informações sobre chaves estrangeiras, veja a [Documentação Oficia
 Adicione alguns pedidos para os clientes:
 
 ```sql
-INSERT INTO orders (cliente_id, amount, order_date) VALUES (1, 150.00, '2024-09-01');
+INSERT INTO orders (customer_id, amount, order_date) VALUES (1, 150.00, '2024-09-01');
 ```
 
 ---
@@ -166,12 +166,67 @@ INSERT INTO orders (cliente_id, amount, order_date) VALUES (1, 150.00, '2024-09-
 Para fazer uma consulta utilizando `INNER JOIN` entre as tabelas relacionadas:
 
 ```sql
-SELECT clientes.name, orders.amount, orders.order_date
+SELECT clients.name, orders.amount, orders.order_date
 FROM clients
-INNER JOIN orders ON clients.id = orders.client_id;
+INNER JOIN orders ON clients.id = orders.customer_id;
 ```
 
 Veja mais sobre consultas com `JOIN` na [Documentação Oficial do PostgreSQL - JOIN](https://www.postgresql.org/docs/current/queries-table-expressions.html#QUERIES-JOIN).
+
+---
+
+## 11.1 Fazer relação N:N `Junction table`
+
+```sql
+CREATE TABLE clients_products (
+  client_id INT REFERENCES clients(id) ON DELETE CASCADE,
+  product_id INT REFERENCES products(id) ON DELETE CASCADE,
+  PRIMARY KEY (client_id, product_id)
+);
+
+```
+```sql
+INSERT INTO clients_products (client_id, product_id) VALUES
+(1, 1), -- Ana purchases Laptop
+(1, 3), -- Ana purchases Wireless Mouse
+(2, 2), -- Pedro purchases Smartphone
+(3, 4), -- Laura purchases Monitor
+(4, 5), -- Lucas purchases Keyboard
+(4, 6), -- Lucas purchases External Hard Drive
+(5, 7), -- Isabela purchases USB-C Hub
+(6, 8), -- Renato purchases Webcam
+(7, 9), -- Juliana purchases Gaming Chair
+(8, 10); -- Roberto purchases Bluetooth Speaker
+```
+
+Query the relationships between clients and products as follows:
+
+```sql
+SELECT c.name AS client_name, p.product_name
+FROM clients c
+JOIN clients_products cp ON c.id = cp.client_id
+JOIN products p ON cp.product_id = p.id;
+```
+
+The output
+
+```sql
+client_name |    product_name     
+-------------+---------------------
+ Ana         | Laptop
+ Ana         | Wireless Mouse
+ Pedro       | Smartphone
+ Laura       | Monitor
+ Lucas       | Keyboard
+ Lucas       | External Hard Drive
+ Isabela     | USB-C Hub
+ Renato      | Webcam
+ Juliana     | Gaming Chair
+ Roberto     | Bluetooth Speaker
+
+
+```
+
 
 ---
 
@@ -180,10 +235,10 @@ Veja mais sobre consultas com `JOIN` na [Documentação Oficial do PostgreSQL - 
 Para calcular a soma dos valores de pedidos por cliente:
 
 ```sql
-SELECT clientes.nome, SUM(pedidos.valor) AS total_gasto
-FROM clientes
-INNER JOIN pedidos ON clientes.id = pedidos.cliente_id
-GROUP BY clientes.nome;
+SELECT clients.name, SUM(orders.amount) AS total_gasto
+FROM clients
+INNER JOIN orders ON clients.id = orders.customer_id
+GROUP BY clients.name;
 ```
 
 Veja mais sobre agregadores na [Documentação Oficial do PostgreSQL - Funções de Agregação](https://www.postgresql.org/docs/current/functions-aggregate.html).
