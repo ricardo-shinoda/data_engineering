@@ -378,12 +378,22 @@ Veja mais sobre `pg_restore` na [Documentação Oficial do PostgreSQL - pg_resto
 ## 21. Executar comandos SQL a partir de um arquivo
 
 ### 21.1 Importar um arquivo SQL de fora do `psql`
+### Ele vai rodar o script sql e trazer o output
+### Importante rodar esse comando na pasta onde eu estou ou colocar o caminho completo.
+
 
 ```bash
 psql -U meu_usuario -h localhost -d meu_banco -f script.sql
 ```
 
+### Com o caminho do arquivo sql a ser rodado
+
+```bash
+psql -U ricardo -h localhost -d library -f ./data_engineering/clients.sql 
+```
+
 ### 21.2 Importar um arquivo SQL estando dentro do `psql`
+### Ele vai rodar o comando sql e trazer o output igual acima, mas dentro do sql
 
 ```sql
 \i caminho/para/o/arquivo/script.sql
