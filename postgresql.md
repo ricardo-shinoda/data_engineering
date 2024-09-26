@@ -619,9 +619,6 @@ pip install sqlalchemy psycopg2
 ##### Exemplo de código em Python com SQLAlchemy (ORM):
 
 ```python
-from sqlalchemy import create_engine, Column, Integer, String
-from sqlalchemy.ext.declarative import declarative_base
-from sqlalchemy.orm import sessionmaker
 
 # Configurar a conexão com PostgreSQL
 engine = create_engine('postgresql://meu_usuario:minha_senha@localhost/meu_banco')
